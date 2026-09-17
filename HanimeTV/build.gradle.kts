@@ -22,6 +22,11 @@ tasks.withType<KotlinJvmCompile> {
     }
 }
 
+dependencies {
+    // C'est cette ligne qui fournit les classes Plugin et registerMainAPI
+    implementation("com.lagradost:cloudstream3:pre-release")
+}
+
 cloudstream {
     description = "Hanime.tv provider for CloudStream."
     authors = listOf("yourname")
