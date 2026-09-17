@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yourname.hanimetv">
+
+    <!-- Hanime.tv is an HTTPS-only site; no additional permissions are needed
+         beyond the INTERNET permission that CloudStream already declares. -->
+    <application
+        android:allowBackup="false"
+        android:label="HanimeTV"
+        android:supportsRtl="true" />
+</manifest>
