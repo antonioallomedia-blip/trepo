@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -19,8 +21,10 @@ android {
 }
 
 kotlin {
-    // Utilise le Java Toolchain pour aligner automatiquement les versions Java et Kotlin
-    jvmToolchain(17)
+    // Force le compilateur Kotlin à utiliser la même version que Java (17)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 cloudstream {
