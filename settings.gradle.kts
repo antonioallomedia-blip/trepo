@@ -1,6 +1,3 @@
-// Configuration du projet CloudstreamPlugins.
-// Seuls les plugins listés dans `enabled` seront compilés.
-
 pluginManagement {
     repositories {
         google()
@@ -12,7 +9,6 @@ pluginManagement {
 
 rootProject.name = "CloudstreamPlugins"
 
-// Liste des plugins à compiler. Ajoute le nom exact du dossier ici.
 val enabled = listOf<String>(
     "HanimeTV",
 )
