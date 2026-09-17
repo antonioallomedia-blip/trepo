@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.5.2")
-        // Nom correct du plugin Gradle CloudStream
         classpath("com.github.recloudstream:gradle:-SNAPSHOT")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
     }
@@ -24,7 +23,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "com.android.library")
-    apply(plugin = "kotlin-android")
+    apply(plugin = "org.jetbrains.kotlin.android")
     apply(plugin = "com.lagradost.cloudstream3.gradle")
 }
 
