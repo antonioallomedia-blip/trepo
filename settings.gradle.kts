@@ -1,12 +1,12 @@
 rootProject.name = "CloudstreamPlugins"
 
 // Only include plugins that currently compile.
-// Comment out or remove any plugin that is broken.
-val enabled = listOf(
-    // "Example",        // broken
-    // "Hahomoe",        // broken
-    // "Hanime",         // broken
-    // "HentaiHaven",    // broken
+// Leave the list empty for now so the build succeeds.
+val enabled = listOf<String>(
+    // "Example",
+    // "Hahomoe",
+    // "Hanime",
+    // "HentaiHaven",
 )
 
 File(rootDir, ".").eachDir { dir ->
