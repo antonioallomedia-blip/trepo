@@ -1,3 +1,6 @@
+// Configuration du projet CloudstreamPlugins.
+// Seuls les plugins listés dans `enabled` seront compilés.
+
 pluginManagement {
     repositories {
         google()
@@ -7,17 +10,9 @@ pluginManagement {
     }
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
 rootProject.name = "CloudstreamPlugins"
 
+// Liste des plugins à compiler. Ajoute le nom exact du dossier ici.
 val enabled = listOf<String>(
     "HanimeTV",
 )
