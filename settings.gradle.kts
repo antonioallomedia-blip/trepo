@@ -1,12 +1,25 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
+}
+
 rootProject.name = "CloudstreamPlugins"
 
-// Only include plugins that currently compile.
-// Leave the list empty for now so the build succeeds.
 val enabled = listOf<String>(
-    // "Example",
-    // "Hahomoe",
-    "HanimeTV", // <-- Ajouté ici pour l'inclure dans la compilation
-    // "HentaiHaven",
+    "HanimeTV",
 )
 
 File(rootDir, ".").eachDir { dir ->
