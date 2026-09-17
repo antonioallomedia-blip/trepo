@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -12,7 +10,6 @@ android {
 
     defaultConfig {
         minSdk = 21
-        // targetSdk est déprécié, on le retire pour éviter les avertissements
     }
 
     compileOptions {
@@ -22,9 +19,8 @@ android {
 }
 
 kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
+    // Utilise le Java Toolchain pour aligner automatiquement les versions Java et Kotlin
+    jvmToolchain(17)
 }
 
 cloudstream {
