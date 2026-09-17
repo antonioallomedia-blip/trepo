@@ -1,17 +1,15 @@
-// Fichier racine du projet CloudstreamPlugins.
-// Configure les dépôts (JitPack est OBLIGATOIRE pour CloudStream) et les plugins Gradle communs.
+// build.gradle.kts (RACINE)
 
 buildscript {
     repositories {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.5.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
-        classpath("com.lagradost:cloudstream3:pre-release")
+        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("com.github.recloudstream:gradle:-SNAPSHOT")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
     }
 }
 
@@ -21,6 +19,12 @@ allprojects {
         mavenCentral()
         maven("https://jitpack.io")
     }
+}
+
+subprojects {
+    apply(plugin = "com.android.library")
+    apply(plugin = "kotlin-android")
+    apply(plugin = "com.lagradost.cloudstream3.gradle")
 }
 
 tasks.register<Delete>("clean") {
