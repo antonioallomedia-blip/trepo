@@ -10,8 +10,8 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.4")
-        // Fixed version to avoid the master-SNAPSHOT metadata error
-        classpath("com.github.recloudstream:gradle:1b0d0e0")
+        // Working commit from recloudstream/gradle
+        classpath("com.github.recloudstream:gradle:32895ae")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     }
 }
@@ -36,9 +36,7 @@ subprojects {
     apply(plugin = "com.lagradost.cloudstream3.gradle")
 
     cloudstream {
-        // Correctly points to your GitHub repository
         setRepo(System.getenv("GITHUB_REPOSITORY") ?: "antonioallomedia-blip/trepo")
-
         description = "Adult / NSFW CloudStream providers"
         authors = listOf("antonioallomedia-blip")
     }
@@ -71,7 +69,6 @@ subprojects {
         val apk by configurations
         val implementation by configurations
 
-        // Stubs for all Cloudstream classes
         apk("com.lagradost:cloudstream3:pre-release")
 
         implementation(kotlin("stdlib"))
