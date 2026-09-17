@@ -5,7 +5,7 @@ rootProject.name = "CloudstreamPlugins"
 val enabled = listOf<String>(
     // "Example",
     // "Hahomoe",
-    // "Hanime",
+    "HanimeTV", // <-- Ajouté ici pour l'inclure dans la compilation
     // "HentaiHaven",
 )
 
