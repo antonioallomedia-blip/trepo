@@ -4,11 +4,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.lagradost.cloudstream3.gradle")
 }
 
 android {
     namespace = "com.yourname.hanimetv"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,8 +27,14 @@ tasks.withType<KotlinJvmCompile> {
 }
 
 dependencies {
-    // C'est cette ligne qui fournit les classes Plugin et registerMainAPI
-    implementation("com.lagradost:cloudstream3:pre-release")
+    // Bibliothèque CloudStream officielle (recloudstream), pas lagradost
+    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
+
+    // Dépendances standard utilisées par CloudStream
+    implementation(kotlin("stdlib"))
+    implementation("com.github.Blatzar:NiceHttp:0.4.11")
+    implementation("org.jsoup:jsoup:1.18.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
 }
 
 cloudstream {
