@@ -53,16 +53,20 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
-
-          # Try to build. If no plugins are enabled, don't fail.
-          ./gradlew make makePluginsJson --stacktrace || true
-
-          # Always make sure the builds folder and plugins.json exist
+          
+          # Compilation et génération du JSON (J'ai enlevé le || true ici)
+          ./gradlew make makePluginsJson --stacktrace
+          
+          # Créer le dossier builds s'il n'existe pas
           mkdir -p $GITHUB_WORKSPACE/builds
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds 2>/dev/null || true
-          cp build/plugins.json $GITHUB_WORKSPACE/builds 2>/dev/null || true
-
-          # Create an empty plugins.json if it doesn't exist
+          
+          # Copier les fichiers .cs3 (plus robuste avec find)
+          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds/ \;
+          
+          # Copier le plugins.json généré (il se trouve à la racine du projet src/)
+          cp $GITHUB_WORKSPACE/src/plugins.json $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
+          
+          # Si le plugins.json n'a pas été généré, on en crée un vide pour éviter de casser le repo
           if [ ! -f $GITHUB_WORKSPACE/builds/plugins.json ]; then
             echo "[]" > $GITHUB_WORKSPACE/builds/plugins.json
           fi
