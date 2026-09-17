@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("com.android.library")
@@ -8,22 +9,16 @@ plugins {
 
 android {
     namespace = "com.yourname.hanimetv"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 21
-    }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
-kotlin {
-    // Force le compilateur Kotlin à utiliser la même version que Java (17)
+tasks.withType<KotlinJvmCompile> {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 
