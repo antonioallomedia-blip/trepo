@@ -26,15 +26,9 @@ tasks.withType<KotlinJvmCompile> {
     }
 }
 
-dependencies {
-    // Utilise l'artefact original de lagradost qui contient bien la classe Plugin
-    implementation("com.lagradost:cloudstream3:pre-release")
-
-    implementation(kotlin("stdlib"))
-    implementation("com.github.Blatzar:NiceHttp:0.4.11")
-    implementation("org.jsoup:jsoup:1.18.3")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
-}
+// ⚠️ Plus AUCUN bloc "dependencies" ici.
+// Le plugin Gradle CloudStream ajoute automatiquement
+// la bibliothèque CloudStream au classpath.
 
 cloudstream {
     description = "Hanime.tv provider for CloudStream."
