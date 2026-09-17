@@ -27,10 +27,9 @@ tasks.withType<KotlinJvmCompile> {
 }
 
 dependencies {
-    // Bibliothèque CloudStream officielle (recloudstream), pas lagradost
-    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
+    // Utilise l'artefact original de lagradost qui contient bien la classe Plugin
+    implementation("com.lagradost:cloudstream3:pre-release")
 
-    // Dépendances standard utilisées par CloudStream
     implementation(kotlin("stdlib"))
     implementation("com.github.Blatzar:NiceHttp:0.4.11")
     implementation("org.jsoup:jsoup:1.18.3")
