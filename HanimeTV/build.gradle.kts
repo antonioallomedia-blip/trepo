@@ -1,13 +1,33 @@
-// HanimeTV/build.gradle.kts
-// Plugin-specific Gradle configuration for the HanimeTV CloudStream extension.
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("com.lagradost.cloudstream3.gradle")
+}
 
-version = 1  // Increment this integer each time you release an update.
+android {
+    namespace = "com.yourname.hanimetv"
+    compileSdk = 34
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 34
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
 
 cloudstream {
-    description = "Hanime.tv provider for CloudStream. Browse, search, and stream adult anime content directly from the official Hanime.tv API."
+    description = "Hanime.tv provider for CloudStream."
     authors = listOf("yourname")
-    status = 1                    // 1 = OK (working)
-    tvTypes = listOf("Movie")     // Hanime.tv content is primarily single-video entries.
+    status = 1
+    tvTypes = listOf("Movie")
     requiresResources = false
     language = "en"
     iconUrl = "https://hanime.tv/favicon.ico"
