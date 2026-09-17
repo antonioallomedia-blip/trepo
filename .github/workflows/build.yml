@@ -54,19 +54,19 @@ jobs:
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           
-          # Compilation et génération du JSON (J'ai enlevé le || true ici)
-          ./gradlew make makePluginsJson --stacktrace
+          # Compilation ciblée sur le module HanimeTV
+          ./gradlew HanimeTV:make makePluginsJson --stacktrace
           
           # Créer le dossier builds s'il n'existe pas
           mkdir -p $GITHUB_WORKSPACE/builds
           
-          # Copier les fichiers .cs3 (plus robuste avec find)
+          # Copier tous les fichiers .cs3 générés vers le dossier builds
           find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds/ \;
           
-          # Copier le plugins.json généré (il se trouve à la racine du projet src/)
+          # Copier le plugins.json généré
           cp $GITHUB_WORKSPACE/src/plugins.json $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
           
-          # Si le plugins.json n'a pas été généré, on en crée un vide pour éviter de casser le repo
+          # Sécurité : si le plugins.json n'a pas été généré, on en crée un vide
           if [ ! -f $GITHUB_WORKSPACE/builds/plugins.json ]; then
             echo "[]" > $GITHUB_WORKSPACE/builds/plugins.json
           fi
