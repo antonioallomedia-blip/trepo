@@ -1,0 +1,8 @@
+{
+  "name": "Trepo",
+  "description": "Adult / NSFW CloudStream providers by antonioallomedia-blip",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/antonioallomedia-blip/trepo/builds/plugins.json"
+  ]
+}
