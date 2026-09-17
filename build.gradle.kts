@@ -10,8 +10,8 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.4")
-        // Working commit from recloudstream/gradle
-        classpath("com.github.recloudstream:gradle:32895ae")
+        // Full working commit hash
+        classpath("com.github.recloudstream:gradle:32895aedb6366f5075cb99bbd2e6ce0a7cac325d")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     }
 }
