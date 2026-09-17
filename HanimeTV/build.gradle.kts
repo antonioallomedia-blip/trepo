@@ -26,9 +26,7 @@ tasks.withType<KotlinJvmCompile> {
     }
 }
 
-// ⚠️ Plus AUCUN bloc "dependencies" ici.
-// Le plugin Gradle CloudStream ajoute automatiquement
-// la bibliothèque CloudStream au classpath.
+// Aucun bloc dependencies ici : le plugin CloudStream les ajoute automatiquement.
 
 cloudstream {
     description = "Hanime.tv provider for CloudStream."
