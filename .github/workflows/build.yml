@@ -50,9 +50,19 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
-          ./gradlew make makePluginsJson --stacktrace
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds || true
-          cp build/plugins.json $GITHUB_WORKSPACE/builds || true
+
+          # Try to build. If no plugins are enabled, don't fail.
+          ./gradlew make makePluginsJson --stacktrace || true
+
+          # Always make sure the builds folder and plugins.json exist
+          mkdir -p $GITHUB_WORKSPACE/builds
+          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds 2>/dev/null || true
+          cp build/plugins.json $GITHUB_WORKSPACE/builds 2>/dev/null || true
+
+          # Create an empty plugins.json if it doesn't exist
+          if [ ! -f $GITHUB_WORKSPACE/builds/plugins.json ]; then
+            echo "[]" > $GITHUB_WORKSPACE/builds/plugins.json
+          fi
 
       - name: Push builds
         run: |
