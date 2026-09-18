@@ -1,30 +1,54 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.5.2")
-        classpath("com.github.recloudstream:gradle:-SNAPSHOT")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
-    }
-}
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
+android {
+    namespace = "com.yourname.hanimetv"
+    compileSdk = 34
+
+    defaultConfig {
+        minSdk = 21
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
-subprojects {
-    apply(plugin = "com.android.library")
-    apply(plugin = "org.jetbrains.kotlin.android")
-    apply(plugin = "com.lagradost.cloudstream3.gradle")
+tasks.withType<KotlinJvmCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
+    }
 }
 
-tasks.register<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:1.9.24")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
+    }
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("com.lagradost:cloudstream3:pre-release"))
+            .using(module("com.github.recloudstream.cloudstream:library:-SNAPSHOT"))
+    }
+}
+
+dependencies {
+    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
+    implementation("com.github.Blatzar:NiceHttp:0.4.11")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    implementation("org.jsoup:jsoup:1.18.3")
+}
+
+cloudstream {
+    description = "Hanime.tv provider for CloudStream."
+    authors = listOf("yourname")
+    status = 1
+    tvTypes = listOf("Movie")
+    requiresResources = false
+    language = "en"
+    iconUrl = "https://hanime.tv/favicon.ico"
 }
