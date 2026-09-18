@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 android {
     namespace = "com.yourname.hanimetv"
     compileSdk = 34
@@ -15,33 +12,8 @@ android {
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_1_8)
-        freeCompilerArgs.add("-Xskip-metadata-version-check")
-    }
-}
-
-configurations.all {
-    resolutionStrategy {
-        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-common:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
-    }
-    resolutionStrategy.dependencySubstitution {
-        substitute(module("com.lagradost:cloudstream3:pre-release"))
-            .using(module("com.github.recloudstream.cloudstream:library:-SNAPSHOT"))
-    }
-}
-
-dependencies {
-    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
-    implementation("com.github.Blatzar:NiceHttp:0.4.11")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
-    implementation("org.jsoup:jsoup:1.18.3")
-}
+// Pas de bloc "dependencies" : le plugin CloudStream les injecte automatiquement,
+// y compris la bibliothèque qui contient la classe "Plugin".
 
 cloudstream {
     description = "Hanime.tv provider for CloudStream."
