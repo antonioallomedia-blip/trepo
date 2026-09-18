@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 android {
     namespace = "com.yourname.hanimetv"
     compileSdk = 34
@@ -12,8 +15,12 @@ android {
     }
 }
 
-// Pas de bloc "dependencies" : le plugin CloudStream les injecte automatiquement,
-// y compris la bibliothèque qui contient la classe "Plugin".
+// Force le compilateur Kotlin à utiliser la même version que Java (1.8)
+tasks.withType<KotlinJvmCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
 
 cloudstream {
     description = "Hanime.tv provider for CloudStream."
