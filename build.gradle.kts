@@ -6,8 +6,8 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.5.2")
-        // CORRECTION : vrai nom du plugin Gradle CloudStream
-        classpath("com.github.recloudstream.gradle:CloudstreamPlugin:1.0.0")
+        // CORRECTION : vrai nom du plugin Gradle CloudStream sur JitPack
+        classpath("com.github.recloudstream:gradle:-SNAPSHOT")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
     }
 }
