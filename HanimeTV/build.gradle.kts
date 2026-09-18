@@ -1,51 +1,30 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
-android {
-    namespace = "com.yourname.hanimetv"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 21
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.5.2")
+        classpath("com.github.recloudstream:gradle:-SNAPSHOT")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_1_8)
-        // Contourne l'incompatibilité de métadonnées de kotlin-stdlib 2.4.0
-        freeCompilerArgs.add("-Xskip-metadata-version-check")
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-common:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
-    }
-    resolutionStrategy.dependencySubstitution {
-        substitute(module("com.lagradost:cloudstream3:pre-release"))
-            .using(module("com.github.recloudstream.cloudstream:library:-SNAPSHOT"))
-    }
+subprojects {
+    apply(plugin = "com.android.library")
+    apply(plugin = "org.jetbrains.kotlin.android")
+    apply(plugin = "com.lagradost.cloudstream3.gradle")
 }
 
-dependencies {
-    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
-}
-
-cloudstream {
-    description = "Hanime.tv provider for CloudStream."
-    authors = listOf("yourname")
-    status = 1
-    tvTypes = listOf("Movie")
-    requiresResources = false
-    language = "en"
-    iconUrl = "https://hanime.tv/favicon.ico"
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
 }
