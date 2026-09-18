@@ -1,20 +1,12 @@
 package com.yourname
 
-import com.lagradost.cloudstream3.*
-import com.lagradost.cloudstream3.utils.*
-import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.Qualities
+import com.lagradost.cloudstream3.utils.newExtractorLink
 
-/**
- * HanimeTV provider for CloudStream.
- *
- * Uses the official Hanime.tv API (v8) for reliable data retrieval:
- *  - Search:        https://hanime.tv/api/v8/search?q={query}
- *  - Video detail:  https://hanime.tv/api/v8/video?id={slug}
- *
- * All network requests are made via the `app` helper (OkHttp wrapper)
- * that CloudStream injects into every MainAPI subclass.
- */
 class HanimeTV : MainAPI() {
 
     override var mainUrl = "https://hanime.tv"
@@ -22,18 +14,15 @@ class HanimeTV : MainAPI() {
     override val hasMainPage = true
     override val hasQuickSearch = false
     override val supportedTypes = setOf(TvType.Movie)
-
     override val lang = "en"
+
+    override val mainPage = mainPageOf(
+        "trending" to "Trending Now"
+    )
 
     // ------------------------------------------------------------------
     //  HOME PAGE
     // ------------------------------------------------------------------
-
-    /**
-     * Returns the home‑page sections displayed when the user opens the
-     * provider. We use the `/api/v8/video` endpoint with `trending` as a
-     * pseudo‑query to fetch currently trending videos.
-     */
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val trending = app.get("$mainUrl/api/v8/video?trending=day&page=$page")
             .parsedSafe<HanimeTrendingResponse>()
@@ -59,23 +48,12 @@ class HanimeTV : MainAPI() {
     // ------------------------------------------------------------------
     //  SEARCH
     // ------------------------------------------------------------------
-
-    /**
-     * Search Hanime.tv via their public search API.
-     *
-     * @param query The raw search string entered by the user.
-     * @return A list of SearchResponse objects or null on failure.
-     */
     override suspend fun search(query: String): List<SearchResponse>? {
         val url = "$mainUrl/api/v8/search?q=${query.trim()}"
         val response = app.get(url).parsedSafe<HanimeSearchResponse>()
 
         return response?.hits?.map { hit ->
-            newMovieSearchResponse(
-                name = hit.name,
-                url = hit.slug,
-                type = TvType.Movie
-            ) {
+            newMovieSearchResponse(hit.name, hit.slug, TvType.Movie) {
                 this.posterUrl = hit.coverUrl
             }
         }
@@ -84,12 +62,6 @@ class HanimeTV : MainAPI() {
     // ------------------------------------------------------------------
     //  LOAD (DETAIL PAGE)
     // ------------------------------------------------------------------
-
-    /**
-     * Load detailed information for a single video.
-     *
-     * @param url The slug of the video (e.g. "overflow").
-     */
     override suspend fun load(url: String): LoadResponse? {
         val apiUrl = "$mainUrl/api/v8/video?id=$url"
         val video = app.get(apiUrl).parsedSafe<HanimeVideoResponse>()?.hentaiVideo
@@ -111,14 +83,6 @@ class HanimeTV : MainAPI() {
     // ------------------------------------------------------------------
     //  LOAD LINKS (VIDEO SOURCES)
     // ------------------------------------------------------------------
-
-    /**
-     * Extract playable video URLs from the Hanime API response.
-     *
-     * The API returns a `videos_manifest` object containing servers and
-     * streams. We iterate over all available qualities and pass them to
-     * the CloudStream callback.
-     */
     override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
@@ -148,7 +112,7 @@ class HanimeTV : MainAPI() {
                     source = this.name,
                     name = "$name - $qualityLabel",
                     url = stream.url,
-                    type = ExtractorLinkType.M3U8   // Hanime streams are HLS (.m3u8)
+                    type = ExtractorLinkType.M3U8
                 ) {
                     this.quality = when (stream.height) {
                         1080 -> Qualities.P1080.value
@@ -167,12 +131,9 @@ class HanimeTV : MainAPI() {
 }
 
 // ======================================================================
-//  DATA MODELS (Jackson / kotlinx.serialization compatible)
+//  DATA MODELS
 // ======================================================================
 
-/**
- * Response wrapper for `/api/v8/video?trending=...`.
- */
 data class HanimeTrendingResponse(
     @JsonProperty("hentai_videos") val results: List<HanimeTrendingItem>? = null,
     @JsonProperty("next_page")     val nextPage: String? = null
@@ -184,9 +145,6 @@ data class HanimeTrendingItem(
     @JsonProperty("cover_url")  val coverUrl: String?
 )
 
-/**
- * Response wrapper for `/api/v8/search?q=...`.
- */
 data class HanimeSearchResponse(
     @JsonProperty("hits") val hits: List<HanimeSearchHit>? = null
 )
@@ -197,11 +155,8 @@ data class HanimeSearchHit(
     @JsonProperty("cover_url")  val coverUrl: String?
 )
 
-/**
- * Full response wrapper for `/api/v8/video?id=...`.
- */
 data class HanimeVideoResponse(
-    @JsonProperty("hentai_video")   val hentaiVideo: HanimeVideo? = null,
+    @JsonProperty("hentai_video")    val hentaiVideo: HanimeVideo? = null,
     @JsonProperty("videos_manifest") val videosManifest: HanimeManifest? = null
 )
 
@@ -226,7 +181,7 @@ data class HanimeServer(
 )
 
 data class HanimeStream(
-    @JsonProperty("url")    val url: String,
-    @JsonProperty("height") val height: Int,
+    @JsonProperty("url")      val url: String,
+    @JsonProperty("height")   val height: Int,
     @JsonProperty("size_mbs") val sizeMbs: Double? = null
 )
