@@ -14,15 +14,14 @@ class HanimeTV : MainAPI() {
     override val hasMainPage = true
     override val hasQuickSearch = false
     override val supportedTypes = setOf(TvType.Movie)
-    override val lang = "en"
+
+    // IMPORTANT : "var" et non "val"
+    override var lang = "en"
 
     override val mainPage = mainPageOf(
         "trending" to "Trending Now"
     )
 
-    // ------------------------------------------------------------------
-    //  HOME PAGE
-    // ------------------------------------------------------------------
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val trending = app.get("$mainUrl/api/v8/video?trending=day&page=$page")
             .parsedSafe<HanimeTrendingResponse>()
@@ -45,9 +44,6 @@ class HanimeTV : MainAPI() {
         )
     }
 
-    // ------------------------------------------------------------------
-    //  SEARCH
-    // ------------------------------------------------------------------
     override suspend fun search(query: String): List<SearchResponse>? {
         val url = "$mainUrl/api/v8/search?q=${query.trim()}"
         val response = app.get(url).parsedSafe<HanimeSearchResponse>()
@@ -59,13 +55,10 @@ class HanimeTV : MainAPI() {
         }
     }
 
-    // ------------------------------------------------------------------
-    //  LOAD (DETAIL PAGE)
-    // ------------------------------------------------------------------
     override suspend fun load(url: String): LoadResponse? {
         val apiUrl = "$mainUrl/api/v8/video?id=$url"
-        val video = app.get(apiUrl).parsedSafe<HanimeVideoResponse>()?.hentaiVideo
-            ?: return null
+        val response = app.get(apiUrl).parsedSafe<HanimeVideoResponse>() ?: return null
+        val video = response.hentaiVideo ?: return null
 
         return newMovieLoadResponse(
             name = video.name,
@@ -80,9 +73,6 @@ class HanimeTV : MainAPI() {
         }
     }
 
-    // ------------------------------------------------------------------
-    //  LOAD LINKS (VIDEO SOURCES)
-    // ------------------------------------------------------------------
     override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
@@ -90,8 +80,7 @@ class HanimeTV : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         val apiUrl = "$mainUrl/api/v8/video?id=$data"
-        val response = app.get(apiUrl).parsedSafe<HanimeVideoResponse>()
-            ?: return false
+        val response = app.get(apiUrl).parsedSafe<HanimeVideoResponse>() ?: return false
 
         val streams = response.videosManifest?.servers
             ?.flatMap { it.streams }
@@ -129,10 +118,6 @@ class HanimeTV : MainAPI() {
         return streams.isNotEmpty()
     }
 }
-
-// ======================================================================
-//  DATA MODELS
-// ======================================================================
 
 data class HanimeTrendingResponse(
     @JsonProperty("hentai_videos") val results: List<HanimeTrendingItem>? = null,
