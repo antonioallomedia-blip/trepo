@@ -14,8 +14,6 @@ class HanimeTV : MainAPI() {
     override val hasMainPage = true
     override val hasQuickSearch = false
     override val supportedTypes = setOf(TvType.Movie)
-
-    // IMPORTANT : "var" et non "val"
     override var lang = "en"
 
     override val mainPage = mainPageOf(
@@ -82,8 +80,9 @@ class HanimeTV : MainAPI() {
         val apiUrl = "$mainUrl/api/v8/video?id=$data"
         val response = app.get(apiUrl).parsedSafe<HanimeVideoResponse>() ?: return false
 
+        // CORRECTION : "it.streams ?: emptyList()" pour gérer le cas null
         val streams = response.videosManifest?.servers
-            ?.flatMap { it.streams }
+            ?.flatMap { it.streams ?: emptyList() }
             ?.filter { it.url.isNotBlank() }
             ?: return false
 
